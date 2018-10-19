@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Clockwork.Lib.Models
@@ -39,6 +38,24 @@ namespace Clockwork.Lib.Models
         public CalculationResult Calculate(ClockWorkUnit unit)
         {
             return new CalculationResult(unit.End - unit.Start, unit.End - unit.Start);
+        }
+    }
+
+    public class StsWorkCalculator : IClockWorkCalculator
+    {
+        public CalculationResult Calculate(ClockWorkUnit unit)
+        {
+            var start = RoundDate(unit.Start, Math.Ceiling);
+            var end = RoundDate(unit.End, Math.Floor);
+
+
+            return new CalculationResult(unit.End - unit.Start, end > start ? end - start : TimeSpan.Zero);
+        }
+
+        private static DateTime RoundDate(DateTime date, Func<double, double> approximate)
+        {
+            var minutes = approximate(date.TimeOfDay.TotalMinutes / 10.0) * 10;
+            return date.Date.AddMinutes(minutes);
         }
     }
 
