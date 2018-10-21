@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Clockwork.Lib.Calculators;
 using Clockwork.Lib.Models;
 using Xunit;
 
@@ -43,23 +42,34 @@ namespace ClockWork.Lib.Tests
 
             myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(7.5), DateTime.Today.AddHours(8.5)));
             Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7.5, myCalendar.First().Start.TimeOfDay.TotalHours);
-            Assert.Equal(17, myCalendar.First().End.TimeOfDay.TotalHours);
+            Assert.Equal(7.5, myCalendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(17, myCalendar.Last().End.TimeOfDay.TotalHours);
 
             myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(16.5), DateTime.Today.AddHours(17.5)));
             Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7.5, myCalendar.First().Start.TimeOfDay.TotalHours);
-            Assert.Equal(17.5, myCalendar.First().End.TimeOfDay.TotalHours);
+            Assert.Equal(7.5, myCalendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(17.5, myCalendar.Last().End.TimeOfDay.TotalHours);
 
             myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(7), DateTime.Today.AddHours(18)));
             Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7, myCalendar.First().Start.TimeOfDay.TotalHours);
-            Assert.Equal(18, myCalendar.First().End.TimeOfDay.TotalHours);
+            Assert.Equal(7, myCalendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(18, myCalendar.Last().End.TimeOfDay.TotalHours);
 
             myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
             Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7, myCalendar.First().Start.TimeOfDay.TotalHours);
-            Assert.Equal(18, myCalendar.First().End.TimeOfDay.TotalHours);
+            Assert.Equal(7, myCalendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(18, myCalendar.Last().End.TimeOfDay.TotalHours);
+        }
+
+        [Fact]
+        public void AddMultipleDaysUnitTest()
+        {
+            var start = new DateTime(2018,10,1);
+
+            var myCalendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(start.AddHours(8), start.AddHours(17)));
+            myCalendar.Add(new ClockWorkUnit(start.AddHours(16), start.AddHours(100)));
+
+            Assert.Equal(5, myCalendar.Count);
         }
 
         [Fact]

@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClockWork.Api", "ClockWork.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwork.Lib", "Clockwork.Lib\Clockwork.Lib.csproj", "{C52773E5-AA55-445F-9476-7AB8E7B8EA53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockWork.Lib.Tests", "ClockWork.Lib.Tests\ClockWork.Lib.Tests.csproj", "{61BCF128-011D-414F-BBEB-7F48B174892E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClockWork.Lib.Tests", "ClockWork.Lib.Tests\ClockWork.Lib.Tests.csproj", "{61BCF128-011D-414F-BBEB-7F48B174892E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockWork.Data", "ClockWorker.Data\ClockWork.Data.csproj", "{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{61BCF128-011D-414F-BBEB-7F48B174892E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61BCF128-011D-414F-BBEB-7F48B174892E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61BCF128-011D-414F-BBEB-7F48B174892E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

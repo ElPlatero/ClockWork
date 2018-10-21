@@ -8,7 +8,7 @@ namespace Clockwork.Lib.Models
     public class ClockWorkUnitCollection : ICollection<ClockWorkUnit>
     {
         public ClockWorker Worker { get; }
-        private readonly HashSet<ClockWorkUnit> _units = new HashSet<ClockWorkUnit>();
+        private IList<ClockWorkUnit> _units = new List<ClockWorkUnit>();
 
         public ClockWorkUnitCollection(ClockWorker worker, params ClockWorkUnit[] units)
         {
@@ -44,7 +44,17 @@ namespace Clockwork.Lib.Models
                         clockWorkUnit.Start = item.Start;
                         clockWorkUnit.End = item.End;
                     }
+
+                    while(clockWorkUnit.Start.DayOfYear != clockWorkUnit.End.DayOfYear)
+                    {
+                        var split = new ClockWorkUnit(clockWorkUnit.End.Date, clockWorkUnit.End);
+                        clockWorkUnit.End = split.Start.AddSeconds(-1);
+                        _units.Add(split);
+                    }
                 }
+
+                _units = _units.OrderBy(p => p.Start).ToList();
+
             }
         }
 

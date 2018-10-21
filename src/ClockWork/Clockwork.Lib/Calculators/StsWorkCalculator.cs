@@ -14,8 +14,8 @@ namespace Clockwork.Lib.Calculators
             var pause = unit.Pause;
             var calculatedDuration = end - start;
             if (calculatedDuration <= TimeSpan.Zero) pause = TimeSpan.Zero;
-            if (calculatedDuration > TimeSpan.FromHours(6) && pause < TimeSpan.FromMinutes(30)) pause = TimeSpan.FromMinutes(30);
-            if (calculatedDuration > TimeSpan.FromHours(9) && pause < TimeSpan.FromMinutes(45)) pause = TimeSpan.FromMinutes(45);
+            if (calculatedDuration - pause > TimeSpan.FromHours(6) && pause < TimeSpan.FromMinutes(30)) pause = TimeSpan.FromMinutes(30);
+            if (calculatedDuration - pause > TimeSpan.FromHours(9) && pause < TimeSpan.FromMinutes(45)) pause = TimeSpan.FromMinutes(45);
 
             calculatedDuration -= pause;
 
