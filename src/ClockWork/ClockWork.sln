@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockWork.Api", "ClockWork.Api\ClockWork.Api.csproj", "{B5DD5808-CF02-4320-A87B-295C8D19C2CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClockWork.Api", "ClockWork.Api\ClockWork.Api.csproj", "{B5DD5808-CF02-4320-A87B-295C8D19C2CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clockwork.Lib", "Clockwork.Lib\Clockwork.Lib.csproj", "{C52773E5-AA55-445F-9476-7AB8E7B8EA53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clockwork.Lib", "Clockwork.Lib\Clockwork.Lib.csproj", "{C52773E5-AA55-445F-9476-7AB8E7B8EA53}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClockWork.Lib.Tests", "ClockWork.Lib.Tests\ClockWork.Lib.Tests.csproj", "{61BCF128-011D-414F-BBEB-7F48B174892E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClockWork.Data", "ClockWorker.Data\ClockWork.Data.csproj", "{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockWork.Data.Tests", "ClockWork.Data.Tests\ClockWork.Data.Tests.csproj", "{E7D381DA-02AF-4E44-95C6-5047CB65BBF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{C52773E5-AA55-445F-9476-7AB8E7B8EA53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C52773E5-AA55-445F-9476-7AB8E7B8EA53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C52773E5-AA55-445F-9476-7AB8E7B8EA53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61BCF128-011D-414F-BBEB-7F48B174892E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61BCF128-011D-414F-BBEB-7F48B174892E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61BCF128-011D-414F-BBEB-7F48B174892E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61BCF128-011D-414F-BBEB-7F48B174892E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6166BB2C-85EF-4030-A0F7-566FD3CEF2F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7D381DA-02AF-4E44-95C6-5047CB65BBF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D381DA-02AF-4E44-95C6-5047CB65BBF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D381DA-02AF-4E44-95C6-5047CB65BBF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D381DA-02AF-4E44-95C6-5047CB65BBF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
