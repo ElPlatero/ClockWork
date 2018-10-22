@@ -21,5 +21,10 @@ namespace Clockwork.Lib.Models
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public TimeSpan Pause { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Start:dd.MM.yyyy HH:mm} - {End:dd.MM.yyyy HH:mm} (Pause: {(int)Pause.TotalHours:D2}:{Pause.Minutes:D2})";
+        }
     }
 }

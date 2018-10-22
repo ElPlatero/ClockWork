@@ -18,8 +18,8 @@ namespace ClockWork.Lib.Tests
             IEffectiveWorkingTimeCalculator calculator = new ExactWorkCalculator();
             var calculationResult = calculator.Calculate(calendar);
 
-            Assert.Equal(TimeSpan.FromHours(9), calculationResult.CalculatedDuration);
-            Assert.Equal(TimeSpan.FromHours(9), calculationResult.ExactDuration);
+            Assert.Equal(TimeSpan.FromHours(9), calculationResult.CalculatedWorkedHours);
+            Assert.Equal(TimeSpan.FromHours(9), calculationResult.ExactWorkedHours);
 
 
         }

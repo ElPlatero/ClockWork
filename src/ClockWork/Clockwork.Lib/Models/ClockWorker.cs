@@ -10,6 +10,8 @@ namespace Clockwork.Lib.Models
             GivenName = givenName;
             DateOfBirth = dateOfBirth;
         }
+
+        public int Id { get; set; }
         public string FamilyName { get; }
         public string GivenName { get; }
         public DateTime DateOfBirth { get; }
@@ -22,6 +24,7 @@ namespace Clockwork.Lib.Models
         protected bool Equals(ClockWorker other)
         {
             return 
+                Id != 0 && other.Id != 0 && Id.Equals(other.Id) || 
                 StringComparer.CurrentCultureIgnoreCase.Equals(FamilyName, other.FamilyName) &&
                 StringComparer.CurrentCultureIgnoreCase.Equals(GivenName, other.GivenName) && 
                 DateOfBirth.Date.Equals(other.DateOfBirth.Date);

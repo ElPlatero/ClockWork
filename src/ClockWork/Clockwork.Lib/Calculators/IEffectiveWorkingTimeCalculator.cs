@@ -4,6 +4,6 @@ namespace Clockwork.Lib.Calculators
 {
     public interface IEffectiveWorkingTimeCalculator
     {
-        CalculationResult Calculate(ClockWorkUnitCollection units);
+        CalculationResultCollection Calculate(ClockWorkUnitCollection units);
     }
 }

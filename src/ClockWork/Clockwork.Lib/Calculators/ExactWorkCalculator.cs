@@ -6,18 +6,16 @@ namespace Clockwork.Lib.Calculators
 {
     public class ExactWorkCalculator : IEffectiveWorkingTimeCalculator
     {
+        private static readonly TimeSpan _workingDay = TimeSpan.FromHours(8);
+
         private CalculationResult Calculate(ClockWorkUnit unit)
         {
-            return new CalculationResult(unit.End - unit.Start, unit.End - unit.Start);
+            return new CalculationResult(unit.Start.Date, _workingDay, unit.End - unit.Start, unit.End - unit.Start);
         }
 
-        public CalculationResult Calculate(ClockWorkUnitCollection units)
+        public CalculationResultCollection Calculate(ClockWorkUnitCollection units)
         {
-            return units.Aggregate(new CalculationResult(TimeSpan.Zero, TimeSpan.Zero), (sum, unit) =>
-            {
-                var result = Calculate(unit);
-                return new CalculationResult(sum.ExactDuration + result.ExactDuration, sum.CalculatedDuration + result.CalculatedDuration);
-            });
+            return new CalculationResultCollection(units.Select(p => Calculate(p)));
         }
     }
 }
