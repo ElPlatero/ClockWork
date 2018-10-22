@@ -8,14 +8,18 @@ namespace Clockwork.Lib.Models
     public class ClockWorkUnitCollection : ICollection<ClockWorkUnit>
     {
         public ClockWorker Worker { get; }
-        private readonly HashSet<ClockWorkUnit> _units = new HashSet<ClockWorkUnit>();
+        private IList<ClockWorkUnit> _units = new List<ClockWorkUnit>();
 
-        public ClockWorkUnitCollection(ClockWorker worker, IEnumerable<ClockWorkUnit> units)
+        public ClockWorkUnitCollection(ClockWorker worker, params ClockWorkUnit[] units)
         {
             Worker = worker;
-            foreach (var clockWorkUnit in units)
+
+            if (units != null)
             {
-                _units.Add(clockWorkUnit);
+                foreach (var clockWorkUnit in units)
+                {
+                    Add(clockWorkUnit);
+                }
             }
         }
 
@@ -26,7 +30,7 @@ namespace Clockwork.Lib.Models
         {
             if(item == null) throw new ArgumentNullException(nameof(item));
 
-            var unitsOfInterest = _units.Where(p => p.End >= item.Start || p.Start <= item.End).ToArray();
+            var unitsOfInterest = _units.Where(p => p.End >= item.Start && p.Start <= item.End).ToArray();
             if (!unitsOfInterest.Any()) _units.Add(item);
             else
             {
@@ -40,7 +44,17 @@ namespace Clockwork.Lib.Models
                         clockWorkUnit.Start = item.Start;
                         clockWorkUnit.End = item.End;
                     }
+
+                    while(clockWorkUnit.Start.DayOfYear != clockWorkUnit.End.DayOfYear)
+                    {
+                        var split = new ClockWorkUnit(clockWorkUnit.End.Date, clockWorkUnit.End);
+                        clockWorkUnit.End = split.Start.AddSeconds(-1);
+                        _units.Add(split);
+                    }
                 }
+
+                _units = _units.OrderBy(p => p.Start).ToList();
+
             }
         }
 
