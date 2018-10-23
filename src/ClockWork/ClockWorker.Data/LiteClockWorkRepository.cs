@@ -47,7 +47,16 @@ namespace ClockWork.Data
                 var workers = db.Workers;
 
                 var foundWorker = workers.FindById(workerId);
-                return foundWorker.ToBusinessModel();
+                return foundWorker?.ToBusinessModel();
+            }
+        }
+
+        public ClockWorker[] LoadWorkers()
+        {
+            using (var db = GetDatabase(_options))
+            {
+                var workers = db.Workers;
+                return workers.FindAll().Select(p => p.ToBusinessModel()).ToArray();
             }
         }
 

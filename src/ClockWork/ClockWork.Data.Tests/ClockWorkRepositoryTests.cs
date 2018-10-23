@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Clockwork.Lib.Models;
 using Microsoft.Extensions.Options;
 using Xunit;
@@ -38,6 +39,10 @@ namespace ClockWork.Data.Tests
 
             Assert.Equal(worker.Id, otherWorker.Id);
             Assert.NotEqual(worker.GivenName, otherWorker.GivenName);
+
+            var allWorkers = repository.LoadWorkers();
+            Assert.Single(allWorkers);
+            Assert.Equal(otherWorker, allWorkers.First());
         }
 
         [Fact]
