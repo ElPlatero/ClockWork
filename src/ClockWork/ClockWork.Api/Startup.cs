@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Clockwork.Lib.Calculators;
 using Clockwork.Lib.Repositories;
 using ClockWork.Data;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace ClockWork.Api
@@ -28,13 +24,18 @@ namespace ClockWork.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.Configure<LiteDbOptions>(options => options.DatabaseFile = "test.db");
+            services.Configure<LiteDbOptions>(options => options.DatabaseFile = "clockwork.db");
             services.TryAddSingleton<IClockWorkRepository, LiteClockWorkRepository>();
+            services.TryAddSingleton<IEffectiveWorkingTimeCalculator, StsWorkCalculator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var options = app.ApplicationServices.GetService<IOptions<LiteDbOptions>>();
+            options.Value.DatabaseFile = $"{env.ContentRootPath}\\{options.Value.DatabaseFile}";
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

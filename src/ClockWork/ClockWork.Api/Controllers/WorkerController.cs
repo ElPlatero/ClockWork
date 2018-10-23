@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Clockwork.Lib.Calculators;
 using Clockwork.Lib.Models;
 using Clockwork.Lib.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +13,18 @@ namespace ClockWork.Api.Controllers
     public class WorkerController : ControllerBase
     {
         private readonly IClockWorkRepository _repository;
+        private readonly IEffectiveWorkingTimeCalculator _calculator;
 
-        public WorkerController(IClockWorkRepository repository)
+        public WorkerController(IClockWorkRepository repository, IEffectiveWorkingTimeCalculator calculator)
         {
             _repository = repository;
+            _calculator = calculator;
         }
 
         [HttpGet]
         public Task<IActionResult> GetWorkers()
         {
-            return Task.FromResult((IActionResult) Ok(_repository.LoadWorkers().Select(p => new
+            return Task.FromResult((IActionResult)Ok(_repository.LoadWorkers().Select(p => new
             {
                 p.Id,
                 Name = $"{p.GivenName} {p.FamilyName}"
@@ -55,5 +59,31 @@ namespace ClockWork.Api.Controllers
             return Task.FromResult(result);
         }
 
+        [HttpPost("{id}")]
+        public Task<IActionResult> AddUnitOfWork(int id, [FromBody] ClockWorkUnit unit)
+        {
+            var calender = _repository.LoadCalendar(id);
+            if (calender == null)
+            {
+                var worker = _repository.LoadWorker(id);
+                if (worker == null) return Task.FromResult((IActionResult)NotFound());
+
+                calender = new ClockWorkUnitCollection(_repository.LoadWorker(id));
+            }
+
+            calender.Add(unit);
+            _repository.Save(calender);
+
+            return Task.FromResult((IActionResult)Ok());
+        }
+
+        [HttpGet("{id}/weekly")]
+        public Task<IActionResult> CalculateWeekyWork(int id)
+        {
+            var calendar = _repository.LoadCalendar(id);
+            if (calendar == null) return Task.FromResult((IActionResult)NoContent());
+
+            return Task.FromResult((IActionResult) Ok(_calculator.Calculate(calendar).GroupByWeek()));
+        }
     }
 }

@@ -70,7 +70,7 @@ namespace ClockWork.Data.Tests
 
             repository.Save(calendar);
             repository.Save(calendar);
-            var savedCalendar = repository.LoadCalendar(worker.Id, new DateTime(2018, 10, 8), new DateTime(2018, 10, 12));
+            var savedCalendar = repository.LoadCalendar(worker.Id);
         }
 
     }
