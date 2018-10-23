@@ -47,12 +47,12 @@ namespace ClockWork.Api.Controllers
         [HttpPut("{id}")]
         public Task<IActionResult> UpdateWorker(int id, [FromBody] ClockWorker worker)
         {
-            IActionResult result;
             if (worker.Id != id) worker.Id = id;
 
             _repository.Save(worker);
 
-            result = Ok(worker)
+            IActionResult result = Ok(worker);
+            return Task.FromResult(result);
         }
 
     }
