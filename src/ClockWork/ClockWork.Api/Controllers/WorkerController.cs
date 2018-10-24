@@ -59,7 +59,8 @@ namespace ClockWork.Api.Controllers
             return Task.FromResult(result);
         }
 
-        [HttpPost("{id}")]
+        //Adds a unit of work to the existing calendar, with regard to existing unit. Overlapping won't occur.
+        [HttpPut("{id}/unit")]
         public Task<IActionResult> AddUnitOfWork(int id, [FromBody] ClockWorkUnit unit)
         {
             var calender = _repository.LoadCalendar(id);
@@ -77,39 +78,52 @@ namespace ClockWork.Api.Controllers
             return Task.FromResult((IActionResult)Ok());
         }
 
-        [HttpGet("{id}/result/daily")]
+        //Removes a unit of work from an existing calendar, effectively shrinking existing units or removing them completely.
+        [HttpDelete("{id}/unit")]
+        public IActionResult RemoveUnitOfWork(int id, [FromBody] ClockWorkUnit unit)
+        {
+            var calender = _repository.LoadCalendar(id);
+            if (calender == null) return NotFound();
+
+            calender.Remove(unit);
+            _repository.Save(calender);
+
+            return Ok();
+        }
+
+[HttpGet("{id}/result/daily")]
         public IActionResult CalculateWork(int id)
         {
-            return Calculate(_repository, id, _calculator);
+            return Calculate(this, id);
         }
 
         [HttpGet("{id}/result/weekly")]
         public IActionResult CalculateWeekyWork(int id)
         {
-            return Calculate(_repository, id, _calculator, p => p.GroupBy.Week);
+            return Calculate(this, id, p => p.GroupBy.Week);
         }
 
         [HttpGet("{id}/result/monthly")]
         public IActionResult CalculateMonthlyWork(int id)
         {
-            return Calculate(_repository, id, _calculator, p => p.GroupBy.Month);
+            return Calculate(this, id, p => p.GroupBy.Month);
         }
 
-        [HttpGet("{id}/result/monthly")]
+        [HttpGet("{id}/result/yearly")]
         public IActionResult CalculateYearlyWork(int id)
         {
-            return Calculate(_repository, id, _calculator, p => p.GroupBy.Year);
+            return Calculate(this, id, p => p.GroupBy.Year);
         }
 
-        private static IActionResult Calculate(IClockWorkRepository repository, int workerId, IEffectiveWorkingTimeCalculator calculator, Func<CalculationResultCollection, CalculationResultCollection> group = null)
+        private static IActionResult Calculate(WorkerController controller, int workerId, Func<CalculationResultCollection, CalculationResultCollection> group = null)
         {
-            var calender = repository.LoadCalendar(workerId);
+            var calender = controller._repository.LoadCalendar(workerId);
             if (calender == null) return new NotFoundResult();
 
             return new OkObjectResult(
                 group != null
-                ? group(calculator.Calculate(calender))
-                : calculator.Calculate(calender)
+                ? group(controller._calculator.Calculate(calender))
+                : controller._calculator.Calculate(calender)
             );
         }
     }

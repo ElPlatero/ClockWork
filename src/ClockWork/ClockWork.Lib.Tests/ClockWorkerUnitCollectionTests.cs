@@ -64,6 +64,35 @@ namespace ClockWork.Lib.Tests
         }
 
         [Fact]
+        public void RemoveOverlapTest()
+        {
+            ClockWorkUnitCollection GetNewCalendar() => new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
+
+            var calendar = GetNewCalendar();
+            var unit = new ClockWorkUnit(DateTime.Today, DateTime.Today.AddHours(4));
+            Assert.False(calendar.Remove(unit));
+
+            unit = new ClockWorkUnit(DateTime.Today.AddHours(18), DateTime.Today.AddHours(20));
+            Assert.False(calendar.Remove(unit));
+
+            unit = new ClockWorkUnit(DateTime.Today, DateTime.Today.AddHours(10));
+            Assert.True(calendar.Remove(unit));
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(10), DateTime.Today.AddHours(17)), calendar.Single());
+
+            calendar = GetNewCalendar();
+            unit = new ClockWorkUnit(DateTime.Today.AddHours(10), DateTime.Today.AddDays(1));
+            Assert.True(calendar.Remove(unit));
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(10)), calendar.Single());
+
+            calendar = GetNewCalendar();
+            unit = new ClockWorkUnit(DateTime.Today.AddHours(10), DateTime.Today.AddHours(12));
+            Assert.True(calendar.Remove(unit));
+            Assert.Equal(2, calendar.Count);
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(10)), calendar.First());
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(12), DateTime.Today.AddHours(17)), calendar.Last());
+        }
+
+        [Fact]
         public void AddMultipleDaysUnitTest()
         {
             var start = new DateTime(2018,10,1);
@@ -113,6 +142,7 @@ namespace ClockWork.Lib.Tests
         {
             var calendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
             Assert.Throws<ArgumentNullException>(() => calendar.Add(null));
+            Assert.Throws<ArgumentNullException>(() => calendar.Remove(null));
         }
 
     }
