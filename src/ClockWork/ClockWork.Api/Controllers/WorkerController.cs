@@ -78,7 +78,7 @@ namespace ClockWork.Api.Controllers
             return Task.FromResult((IActionResult)Ok());
         }
 
-        //Removes a unit of work from an existing calendar, effectively shrinking existing units or removing them completely.
+        //Removes a unit of work from an existing calendar, effectively shrinking existing units, splitting them or removing them completely.
         [HttpDelete("{id}/unit")]
         public IActionResult RemoveUnitOfWork(int id, [FromBody] ClockWorkUnit unit)
         {
@@ -91,7 +91,7 @@ namespace ClockWork.Api.Controllers
             return Ok();
         }
 
-[HttpGet("{id}/result/daily")]
+        [HttpGet("{id}/result/daily")]
         public IActionResult CalculateWork(int id)
         {
             return Calculate(this, id);
