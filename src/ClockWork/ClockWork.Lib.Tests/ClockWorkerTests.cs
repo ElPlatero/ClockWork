@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Clockwork.Lib.Models;
 using Xunit;
-using Xunit.Sdk;
 
 namespace ClockWork.Lib.Tests
 {

@@ -26,24 +26,6 @@ namespace Clockwork.Lib.Calculators
         public TimeSpan CalculatedWorkedHours => TimeSpan.FromSeconds(this.Sum(p => p.CalculatedWorkedHours.TotalSeconds));
         public TimeSpan Overtime => CalculatedWorkedHours - WorkingHours;
 
-        private static DateTime GetWeek(DateTime date)
-        {
-            while (date.DayOfWeek != DayOfWeek.Monday) date = date.AddDays(-1);
-            return date;
-        }
-
-        public CalculationResultCollection GroupByWeek()
-        {
-            var result = new CalculationResultCollection();
-            result.AddRange(this
-                .GroupBy(p => GetWeek(p.Date))
-                .Select(p => new CalculationResult(
-                    p.Key,
-                    TimeSpan.FromSeconds(p.Sum(q => q.WorkingHours.TotalSeconds)),
-                    TimeSpan.FromSeconds(p.Sum(q => q.ExactWorkedHours.TotalSeconds)),
-                    TimeSpan.FromSeconds(p.Sum(q => q.CalculatedWorkedHours.TotalSeconds))
-                )));
-            return result;
-        }
+        public CalculationGrouping GroupBy => new CalculationGrouping(this);
     }
 }

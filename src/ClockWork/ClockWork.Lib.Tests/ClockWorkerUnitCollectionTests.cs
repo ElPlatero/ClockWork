@@ -35,30 +35,61 @@ namespace ClockWork.Lib.Tests
         [Fact]
         public void AddOverlapTest()
         {
-            var myCalendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
+            var calendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)))
+            {
+                new ClockWorkUnit(DateTime.Today.AddHours(4), DateTime.Today.AddHours(5))
+            };
 
-            myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(4), DateTime.Today.AddHours(5)));
-            Assert.Equal(2, myCalendar.Count);
+            Assert.Equal(2, calendar.Count);
 
-            myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(7.5), DateTime.Today.AddHours(8.5)));
-            Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7.5, myCalendar.Last().Start.TimeOfDay.TotalHours);
-            Assert.Equal(17, myCalendar.Last().End.TimeOfDay.TotalHours);
+            calendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(7.5), DateTime.Today.AddHours(8.5)));
+            Assert.Equal(2, calendar.Count);
+            Assert.Equal(7.5, calendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(17, calendar.Last().End.TimeOfDay.TotalHours);
 
-            myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(16.5), DateTime.Today.AddHours(17.5)));
-            Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7.5, myCalendar.Last().Start.TimeOfDay.TotalHours);
-            Assert.Equal(17.5, myCalendar.Last().End.TimeOfDay.TotalHours);
+            calendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(16.5), DateTime.Today.AddHours(17.5)));
+            Assert.Equal(2, calendar.Count);
+            Assert.Equal(7.5, calendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(17.5, calendar.Last().End.TimeOfDay.TotalHours);
 
-            myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(7), DateTime.Today.AddHours(18)));
-            Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7, myCalendar.Last().Start.TimeOfDay.TotalHours);
-            Assert.Equal(18, myCalendar.Last().End.TimeOfDay.TotalHours);
+            calendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(7), DateTime.Today.AddHours(18)));
+            Assert.Equal(2, calendar.Count);
+            Assert.Equal(7, calendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(18, calendar.Last().End.TimeOfDay.TotalHours);
 
-            myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
-            Assert.Equal(2, myCalendar.Count);
-            Assert.Equal(7, myCalendar.Last().Start.TimeOfDay.TotalHours);
-            Assert.Equal(18, myCalendar.Last().End.TimeOfDay.TotalHours);
+            calendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
+            Assert.Equal(2, calendar.Count);
+            Assert.Equal(7, calendar.Last().Start.TimeOfDay.TotalHours);
+            Assert.Equal(18, calendar.Last().End.TimeOfDay.TotalHours);
+        }
+
+        [Fact]
+        public void RemoveOverlapTest()
+        {
+            ClockWorkUnitCollection GetNewCalendar() => new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
+
+            var calendar = GetNewCalendar();
+            var unit = new ClockWorkUnit(DateTime.Today, DateTime.Today.AddHours(4));
+            Assert.False(calendar.Remove(unit));
+
+            unit = new ClockWorkUnit(DateTime.Today.AddHours(18), DateTime.Today.AddHours(20));
+            Assert.False(calendar.Remove(unit));
+
+            unit = new ClockWorkUnit(DateTime.Today, DateTime.Today.AddHours(10));
+            Assert.True(calendar.Remove(unit));
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(10), DateTime.Today.AddHours(17)), calendar.Single());
+
+            calendar = GetNewCalendar();
+            unit = new ClockWorkUnit(DateTime.Today.AddHours(10), DateTime.Today.AddDays(1));
+            Assert.True(calendar.Remove(unit));
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(10)), calendar.Single());
+
+            calendar = GetNewCalendar();
+            unit = new ClockWorkUnit(DateTime.Today.AddHours(10), DateTime.Today.AddHours(12));
+            Assert.True(calendar.Remove(unit));
+            Assert.Equal(2, calendar.Count);
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(10)), calendar.First());
+            Assert.Equal(new ClockWorkUnit(DateTime.Today.AddHours(12), DateTime.Today.AddHours(17)), calendar.Last());
         }
 
         [Fact]
@@ -66,39 +97,52 @@ namespace ClockWork.Lib.Tests
         {
             var start = new DateTime(2018,10,1);
 
-            var myCalendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(start.AddHours(8), start.AddHours(17)));
-            myCalendar.Add(new ClockWorkUnit(start.AddHours(16), start.AddHours(100)));
+            var calendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(start.AddHours(8), start.AddHours(17)))
+            {
+                new ClockWorkUnit(start.AddHours(16), start.AddHours(100))
+            };
 
-            Assert.Equal(5, myCalendar.Count);
+            Assert.Equal(5, calendar.Count);
         }
 
         [Fact]
         public void CollectionTest()
         {
-            var myCalendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
-            myCalendar.Clear();
+            var calendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
+            calendar.Clear();
 
-            Assert.Empty(myCalendar);
+            Assert.Empty(calendar);
 
-            myCalendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
-            Assert.Contains(myCalendar.First(), myCalendar);
+            calendar.Add(new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
+            Assert.Contains(calendar.First(), calendar);
 
-            ClockWorkUnit[] myArray = new ClockWorkUnit[10];
-            myCalendar.CopyTo(myArray, 1);
-            Assert.True(myArray.Skip(2).All(p => p == null));
-            Assert.Null(myArray.First());
-            Assert.Contains(myArray[1], myCalendar);
+            var unitList = new ClockWorkUnit[10];
+            calendar.CopyTo(unitList, 1);
+            Assert.True(unitList.Skip(2).All(p => p == null));
+            Assert.Null(unitList.First());
+            Assert.Contains(unitList[1], calendar);
 
-            myCalendar.Remove(myArray[1]);
-            Assert.Empty(myCalendar);
+            calendar.Remove(unitList[1]);
+            Assert.Empty(calendar);
+        }
+
+        [Fact]
+        public void CreateEmptyCollectionTest()
+        {
+            var calendar = new ClockWorkUnitCollection(Worker);
+            Assert.Empty(calendar);
+            calendar = new ClockWorkUnitCollection(Worker, null);
+            Assert.Empty(calendar);
+            calendar.Add(new ClockWorkUnit(DateTime.Today, DateTime.Now));
+            Assert.NotEmpty(calendar);
         }
 
         [Fact]
         public void ExceptionTest()
         {
-            var myCalendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
-            Assert.Throws<ArgumentNullException>(() => myCalendar.Add(null));
-
+            var calendar = new ClockWorkUnitCollection(Worker, new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)));
+            Assert.Throws<ArgumentNullException>(() => calendar.Add(null));
+            Assert.Throws<ArgumentNullException>(() => calendar.Remove(null));
         }
 
     }

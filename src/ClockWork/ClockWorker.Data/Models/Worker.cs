@@ -3,7 +3,7 @@ using Clockwork.Lib.Models;
 
 namespace ClockWork.Data.Models
 {
-    class Worker
+    internal class Worker
     {
         public int Id { get; set; }
         public string FamilyName { get; set; }

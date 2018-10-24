@@ -3,8 +3,10 @@ using Clockwork.Lib.Models;
 
 namespace ClockWork.Data.Models
 {
-    class Unit
+    internal class Unit
     {
+        // by liteDb design, I think.
+        // ReSharper disable once UnusedMember.Global
         public int Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }

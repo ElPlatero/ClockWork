@@ -6,9 +6,9 @@ namespace Clockwork.Lib.Calculators
 {
     public class StsWorkCalculator : IEffectiveWorkingTimeCalculator
     {
-        private static readonly TimeSpan _workingHours = TimeSpan.FromHours(8);
+        private static readonly TimeSpan WorkingHours = TimeSpan.FromHours(8);
 
-        private CalculationResult Calculate(ClockWorkUnit unit)
+        private static CalculationResult Calculate(ClockWorkUnit unit)
         {
             var start = RoundDate(unit.Start, Math.Ceiling);
             var end = RoundDate(unit.End, Math.Floor);
@@ -24,7 +24,7 @@ namespace Clockwork.Lib.Calculators
             if (calculatedDuration > TimeSpan.FromHours(10)) calculatedDuration = TimeSpan.FromHours(10);
             else if(calculatedDuration < TimeSpan.Zero) calculatedDuration = TimeSpan.Zero;
 
-            return new CalculationResult(unit.Start.Date, _workingHours, unit.End - unit.Start - pause, calculatedDuration);
+            return new CalculationResult(unit.Start.Date, WorkingHours, unit.End - unit.Start - pause, calculatedDuration);
         }
 
         private static DateTime RoundDate(DateTime date, Func<double, double> approximate)
@@ -35,7 +35,7 @@ namespace Clockwork.Lib.Calculators
 
         public CalculationResultCollection Calculate(ClockWorkUnitCollection units)
         {
-            return new CalculationResultCollection(units.Select(p => Calculate(p)));
+            return new CalculationResultCollection(units.Select(Calculate));
         }
     }
 }

@@ -3,7 +3,7 @@ using LiteDB;
 
 namespace ClockWork.Data
 {
-    class ClockWorkDatabase : LiteDatabase
+    internal class ClockWorkDatabase : LiteDatabase
     {
         public ClockWorkDatabase(string database) : base(database) { }
 

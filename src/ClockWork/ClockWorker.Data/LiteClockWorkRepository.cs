@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Clockwork.Lib.Models;
 using Clockwork.Lib.Repositories;
@@ -11,6 +11,7 @@ namespace ClockWork.Data
     public class LiteClockWorkRepository : IClockWorkRepository
     {
         private readonly LiteDbOptions _options;
+        private readonly List<ClockWorkUnitCollection> _loadedCollections = new List<ClockWorkUnitCollection>();
         private static ClockWorkDatabase GetDatabase(LiteDbOptions options) => new ClockWorkDatabase(options.DatabaseFile);
 
 
@@ -22,21 +23,23 @@ namespace ClockWork.Data
             mapper.Entity<Unit>().DbRef(p => p.Worker, "workers");
         }
 
-        public ClockWorkUnitCollection LoadCalendar(int workerId, DateTime firstDay, DateTime lastDay)
+        public ClockWorkUnitCollection LoadCalendar(int workerId)
         {
-            lastDay = lastDay.Date.AddDays(1).AddSeconds(-1);
+            var loadedCalendar = _loadedCollections.FirstOrDefault(p => p.Worker.Id == workerId);
+            if (loadedCalendar != null) return loadedCalendar; 
+
             using (var db = GetDatabase(_options))
             {
                 var units = db.Units;
 
-                units.EnsureIndex(p => p.Start);
-                units.EnsureIndex(p => p.End);
-
                 var query = units
                     .Include(p => p.Worker)
-                    .Find(p => p.Start >= firstDay && lastDay >= p.End).Where(p => p.Worker.Id == workerId).ToArray();
+                    .Find(p => p.Worker.Id == workerId).ToArray();
 
-                return !query.Any() ? null : new ClockWorkUnitCollection(query[0].Worker.ToBusinessModel(), query.Select(p => p.ToBusinessModel()).ToArray());
+                if (!query.Any()) return null;
+                loadedCalendar = new ClockWorkUnitCollection(query[0].Worker.ToBusinessModel(), query.Select(p => p.ToBusinessModel()).ToArray());
+                _loadedCollections.Add(loadedCalendar);
+                return loadedCalendar;
             }
         }
 
@@ -47,12 +50,29 @@ namespace ClockWork.Data
                 var workers = db.Workers;
 
                 var foundWorker = workers.FindById(workerId);
-                return foundWorker.ToBusinessModel();
+                return foundWorker?.ToBusinessModel();
+            }
+        }
+
+        public ClockWorker[] LoadWorkers()
+        {
+            using (var db = GetDatabase(_options))
+            {
+                var workers = db.Workers;
+                return workers.FindAll().Select(p => p.ToBusinessModel()).ToArray();
             }
         }
 
         public void Save(ClockWorkUnitCollection calendar)
         {
+            var existingCalender = _loadedCollections.SingleOrDefault(p => p.Worker.Equals(calendar.Worker));
+            if (existingCalender != null)
+            {
+                _loadedCollections.Remove(existingCalender);
+            }
+
+            _loadedCollections.Add(calendar);
+
             using (var db = GetDatabase(_options))
             {
                 var workers = db.Workers;

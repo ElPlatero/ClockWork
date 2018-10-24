@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Clockwork.Lib.Calculators;
 using Clockwork.Lib.Models;
 using Xunit;
@@ -97,25 +96,36 @@ namespace ClockWork.Lib.Tests
 
             calendar.ToList().ForEach(p => _output.WriteLine(p.ToString()));
 
-            var result = calculator.Calculate(calendar);//.GroupByWeek();
+            var calculationResult = calculator.Calculate(calendar);//.GroupByWeek();
 
             string DisplayTime(TimeSpan ts)
             {
                 return $"{(int) ts.TotalHours:D2}:{ts.Minutes:D2}";
             }
 
+            void LogResult(CalculationResultCollection r) => r.ToList().ForEach(p => _output.WriteLine("{0} (Overtime: {1})", p, DisplayTime(p.Overtime)));
+
             _output.WriteLine($"Calculated working time for calendar from {calendar.First().Start.Date:dd.MM.yyyy} to {calendar.Last().Start.Date:dd.MM.yyyy}");
-            _output.WriteLine($"    Regular working hours: {DisplayTime(result.WorkingHours)}");
-            _output.WriteLine($"    Hours accounted for: {DisplayTime(result.CalculatedWorkedHours)}");
-            _output.WriteLine($"    Unaccounted time: {DisplayTime(result.ExactWorkedHours - result.CalculatedWorkedHours)}");
-            _output.WriteLine($"    Accounted overtime: {DisplayTime(result.Overtime)}");
+            _output.WriteLine($"    Regular working hours: {DisplayTime(calculationResult.WorkingHours)}");
+            _output.WriteLine($"    Hours accounted for: {DisplayTime(calculationResult.CalculatedWorkedHours)}");
+            _output.WriteLine($"    Unaccounted time: {DisplayTime(calculationResult.ExactWorkedHours - calculationResult.CalculatedWorkedHours)}");
+            _output.WriteLine($"    Accounted overtime: {DisplayTime(calculationResult.Overtime)}");
 
-            Assert.Equal(15, result.Count);
+            LogResult(calculationResult);
+            Assert.Equal(15, calculationResult.Count);
+            Assert.Equal(calculationResult, calculationResult.GroupBy.Day);
 
-            result = result.GroupByWeek();
+            var result = calculationResult.GroupBy.Week;
+            LogResult(result);
             Assert.Equal(4, result.Count);
 
-            result.ToList().ForEach(p => _output.WriteLine("{0} (Overtime: {1})", p, DisplayTime(p.Overtime)));
+            result = calculationResult.GroupBy.Month;
+            LogResult(result);
+            Assert.Single(result);
+
+            result = calculationResult.GroupBy.Year;
+            LogResult(result);
+            Assert.Single(result);
         }
     }
 }
