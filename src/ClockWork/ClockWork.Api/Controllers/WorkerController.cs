@@ -77,13 +77,40 @@ namespace ClockWork.Api.Controllers
             return Task.FromResult((IActionResult)Ok());
         }
 
-        [HttpGet("{id}/weekly")]
-        public Task<IActionResult> CalculateWeekyWork(int id)
+        [HttpGet("{id}/result/daily")]
+        public IActionResult CalculateWork(int id)
         {
-            var calendar = _repository.LoadCalendar(id);
-            if (calendar == null) return Task.FromResult((IActionResult)NoContent());
+            return Calculate(_repository, id, _calculator);
+        }
 
-            return Task.FromResult((IActionResult) Ok(_calculator.Calculate(calendar).GroupByWeek()));
+        [HttpGet("{id}/result/weekly")]
+        public IActionResult CalculateWeekyWork(int id)
+        {
+            return Calculate(_repository, id, _calculator, p => p.GroupBy.Week);
+        }
+
+        [HttpGet("{id}/result/monthly")]
+        public IActionResult CalculateMonthlyWork(int id)
+        {
+            return Calculate(_repository, id, _calculator, p => p.GroupBy.Month);
+        }
+
+        [HttpGet("{id}/result/monthly")]
+        public IActionResult CalculateYearlyWork(int id)
+        {
+            return Calculate(_repository, id, _calculator, p => p.GroupBy.Year);
+        }
+
+        private static IActionResult Calculate(IClockWorkRepository repository, int workerId, IEffectiveWorkingTimeCalculator calculator, Func<CalculationResultCollection, CalculationResultCollection> group = null)
+        {
+            var calender = repository.LoadCalendar(workerId);
+            if (calender == null) return new NotFoundResult();
+
+            return new OkObjectResult(
+                group != null
+                ? group(calculator.Calculate(calender))
+                : calculator.Calculate(calender)
+            );
         }
     }
 }

@@ -14,12 +14,10 @@ namespace Clockwork.Lib.Models
         {
             Worker = worker;
 
-            if (units != null)
+            if (units == null) return;
+            foreach (var clockWorkUnit in units)
             {
-                foreach (var clockWorkUnit in units)
-                {
-                    Add(clockWorkUnit);
-                }
+                Add(clockWorkUnit);
             }
         }
 

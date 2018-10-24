@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Clockwork.Lib.Models;
 using Clockwork.Lib.Repositories;
@@ -70,8 +69,9 @@ namespace ClockWork.Data
             if (existingCalender != null)
             {
                 _loadedCollections.Remove(existingCalender);
-                _loadedCollections.Add(calendar);
             }
+
+            _loadedCollections.Add(calendar);
 
             using (var db = GetDatabase(_options))
             {
