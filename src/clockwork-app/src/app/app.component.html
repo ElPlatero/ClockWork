@@ -1,1 +1,15 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="elevated-nav">
+  <button mat-button routerLink="/">
+    <mat-icon>home</mat-icon>
+    {{title}}
+  </button>
+
+  <span class="fill-remaining-space"></span>
+  <!--div>
+    <button mat-button routerLink="/products">Products</button>
+    <button mat-button routerLink="/dashboard">Dashboard</button>
+  </div-->
+</mat-toolbar>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
