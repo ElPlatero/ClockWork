@@ -37,4 +37,4 @@ ehthumbs.db
 Thumbs.db
 /fritzbox-settings.json
 /publish.ps1
-src/ClockWork/ClockWork.Api/clockwork.db
+/src/ClockWork/ClockWork.Api/*.db

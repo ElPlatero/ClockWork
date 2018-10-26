@@ -17,5 +17,11 @@ namespace Clockwork.Lib.Calculators
         {
             return new CalculationResultCollection(units.Select(Calculate));
         }
+
+        public CalculationResult GetBalance(ClockWorkUnitCollection units, DateTime snapshot)
+        {
+            var result = new CalculationResultCollection(new ClockWorkUnitCollection(units.Worker, units.Where(p => p.End <= snapshot).ToArray()).Select(Calculate));
+            return new CalculationResult(units.First().Start.Date, result.WorkingHours, result.ExactWorkedHours, result.CalculatedWorkedHours);
+        }
     }
 }
