@@ -23,8 +23,9 @@ namespace Clockwork.Lib.Calculators
         {
             string DisplayTime(TimeSpan ts)
             {
-                return $"{(int)ts.TotalHours:D2}:{ts.Minutes:D2}";
+                return $"{(ts < TimeSpan.Zero ? "-" : "+")}{(int) Math.Abs(ts.TotalHours):D2}:{Math.Abs(ts.Minutes):D2}";
             }
+
 
 
             return $"{Date:dd.MM.yyyy}, KW {1 + (Date.DayOfYear - 1) / 7}: {DisplayTime(CalculatedWorkedHours)}/{DisplayTime(WorkingHours)}";
