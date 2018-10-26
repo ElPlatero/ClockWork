@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Clockwork.Lib.Calculators;
 using Clockwork.Lib.Models;
 using Xunit;
@@ -21,7 +22,10 @@ namespace ClockWork.Lib.Tests
             Assert.Equal(TimeSpan.FromHours(9), calculationResult.CalculatedWorkedHours);
             Assert.Equal(TimeSpan.FromHours(9), calculationResult.ExactWorkedHours);
 
+            var result = calculator.GetBalance(calendar, DateTime.Today.AddDays(1));
+            Assert.Equal(calculationResult.CalculatedWorkedHours, result.CalculatedWorkedHours);
 
+            Assert.Equal("26.10.2018, KW 43: 09:00/08:00", calculationResult.Single().ToString());
         }
     }
 }
