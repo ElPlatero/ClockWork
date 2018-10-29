@@ -99,7 +99,8 @@ namespace ClockWork.Lib.Tests
                 new ClockWorkUnit(new DateTime(2018, 10, 23, 07, 45, 0), new DateTime(2018, 10, 23, 17, 00, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 24, 00, 00, 0), new DateTime(2018, 10, 24, 00, 00, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 25, 07, 40, 0), new DateTime(2018, 10, 25, 16, 36, 0)),
-                new ClockWorkUnit(new DateTime(2018, 10, 26, 07, 32, 0), new DateTime(2018, 10, 26, 17, 02, 0))
+                new ClockWorkUnit(new DateTime(2018, 10, 26, 07, 32, 0), new DateTime(2018, 10, 26, 17, 02, 0)),
+
             );
 
             IEffectiveWorkingTimeCalculator calculator = new StsWorkCalculator();
