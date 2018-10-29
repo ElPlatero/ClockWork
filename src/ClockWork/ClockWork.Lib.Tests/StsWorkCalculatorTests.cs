@@ -87,7 +87,7 @@ namespace ClockWork.Lib.Tests
                 new ClockWorkUnit(new DateTime(2018, 10, 05, 07, 36, 0), new DateTime(2018, 10, 05, 17, 05, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 08, 06, 58, 0), new DateTime(2018, 10, 08, 15, 35, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 09, 07, 33, 0), new DateTime(2018, 10, 09, 17, 01, 0)),
-                new ClockWorkUnit(new DateTime(2018, 10, 10, 07, 35, 0), new DateTime(2018, 10, 10, 21, 00, 0)),
+                new ClockWorkUnit(new DateTime(2018, 10, 10, 07, 35, 0), new DateTime(2018, 10, 10, 21, 00, 0)).PauseFor(60),
                 new ClockWorkUnit(new DateTime(2018, 10, 11, 08, 30, 0), new DateTime(2018, 10, 11, 21, 00, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 12, 07, 35, 0), new DateTime(2018, 10, 12, 16, 45, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 15, 07, 42, 0), new DateTime(2018, 10, 15, 17, 00, 0)),
