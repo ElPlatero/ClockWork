@@ -100,7 +100,8 @@ namespace ClockWork.Lib.Tests
                 new ClockWorkUnit(new DateTime(2018, 10, 24, 00, 00, 0), new DateTime(2018, 10, 24, 00, 00, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 25, 07, 40, 0), new DateTime(2018, 10, 25, 16, 36, 0)),
                 new ClockWorkUnit(new DateTime(2018, 10, 26, 07, 32, 0), new DateTime(2018, 10, 26, 17, 02, 0)),
-
+                new ClockWorkUnit(new DateTime(2018, 10, 29, 07, 40, 0), new DateTime(2018, 10, 29, 16, 10, 0)),
+                new ClockWorkUnit(new DateTime(2018, 10, 30, 07, 35, 0), new DateTime(2018, 10, 30, 17, 02, 0))
             );
 
             IEffectiveWorkingTimeCalculator calculator = new StsWorkCalculator();
@@ -129,14 +130,14 @@ namespace ClockWork.Lib.Tests
             LogResult(calculationResult, p => p.Date.ToString("dd.MM.yyyy"));
             _output.WriteLine("".PadLeft(80, '='));
 
-            Assert.Equal(19, calculationResult.Count);
+            Assert.Equal(21, calculationResult.Count);
             Assert.Equal(calculationResult, calculationResult.GroupBy.Day);
 
             var result = calculationResult.GroupBy.Week;
             _output.WriteLine("Output by week:");
             LogResult(result, p => "KW " + (1 + (p.Date.DayOfYear - 1) / 7));
             _output.WriteLine("".PadLeft(80, '='));
-            Assert.Equal(4, result.Count);
+            Assert.Equal(5, result.Count);
 
             result = calculationResult.GroupBy.Month;
             _output.WriteLine("Output by month:");
