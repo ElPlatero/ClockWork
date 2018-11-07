@@ -27,4 +27,8 @@ export class WorkerService {
     .pipe(map((p: ClockWorker) => p))
     .toPromise();
   }
+
+  public addWork(date: Date, beginWork: number, endWork: number, pause: number): boolean {
+
+  }
 }

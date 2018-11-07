@@ -20,9 +20,10 @@ namespace ClockWork.Lib.Tests
         [Fact]
         public void Test()
         {
-            var unit = new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(17)).PauseFor(30);
+            var unit = new ClockWorkUnit(DateTime.Today.AddHours(8), DateTime.Today.AddHours(12));
+            var second = new ClockWorkUnit(DateTime.Today.AddHours(8.25), DateTime.Today.AddHours(18));
             var worker = new ClockWorker("Mustermann", "Max", DateTime.Today.AddYears(-21));
-            var calendar = new ClockWorkUnitCollection(worker, unit);
+            var calendar = new ClockWorkUnitCollection(worker, unit, second);
 
             IEffectiveWorkingTimeCalculator calculator = new StsWorkCalculator();
             var calculationResult = calculator.Calculate(calendar);
